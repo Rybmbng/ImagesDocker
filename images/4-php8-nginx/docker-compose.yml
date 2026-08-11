@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: images/4-php8-nginx/Dockerfile
+      args:
+        PHP_VERSION: ${PHP_VERSION:-8.4}
+    image: itbalitimbungan/php${PHP_VERSION:-8.4}-nginx:latest
+    container_name: php${PHP_VERSION:-8.4}-nginx
+    ports:
+      - "80:80"
+      - "22:22"
+    volumes:
+      - ./docker:/var/www/html
+    environment:
+      - SSH_ROOT_PASSWORD=${SSH_ROOT_PASSWORD:-}
+      - APP_ENV=${APP_ENV:-local}
+    networks:
+      - local-network
+    restart: unless-stopped
+
+networks:
+  local-network:
+    driver: bridge

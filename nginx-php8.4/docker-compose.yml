@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: itbalitimbungan/nginx-php84-22:latest
+    container_name: nginx-php84-22
+    ports:
+      - "80:80"
+      - "2222:22"
+    volumes:
+      - .:/var/www/html/storage
+    networks:
+      - local-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  local-network:
+    driver: bridge

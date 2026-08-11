@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: images/7-nodejs-only/Dockerfile
+      args:
+        NODE_VERSION: ${NODE_VERSION:-22}
+    image: itbalitimbungan/nodejs${NODE_VERSION:-22}:latest
+    container_name: nodejs${NODE_VERSION:-22}
+    ports:
+      - "22:22"
+      - "3000:3000"
+    volumes:
+      - ./docker:/var/www/html
+    environment:
+      - SSH_ROOT_PASSWORD=${SSH_ROOT_PASSWORD:-}
+      - NODE_ENV=${NODE_ENV:-production}
+    networks:
+      - local-network
+    restart: unless-stopped
+
+networks:
+  local-network:
+    driver: bridge
